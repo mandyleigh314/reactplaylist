@@ -1,0 +1,22 @@
+.App {
+  text-align: center;
+  background-color: #361d44;
+  font-family: 'Saira Semi Condensed', sans-serif;
+}
+
+.jumbotron {
+  background-color: #063c33;
+}
+
+#navhead {
+  font-family: 'Sedgwick Ave Display', cursive;
+  color: #bbafbe;
+}
+
+p {
+  color: green;
+}
+
+label {
+  color: #9da7af;
+}
