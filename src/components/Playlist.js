@@ -11,8 +11,7 @@ class Playlist extends Component {
       userName: '',
       songArtist: '',
       songTitle: '',
-      songNotes: '',
-      song: {}
+      songNotes: ''
     }
   }
 _name = (e) => {
@@ -27,16 +26,42 @@ _title = (e) => {
 _notes = (e) => {
   this.setState({songNotes: e.target.value})
 }
-_submit = (e) => {
-  e.preventDefault()
-  this.setState({userName: this.state.userName, songArtist: this.state.songArtist, songTitle: this.state.songTitle, songNotes: this.state.songNotes, song: {userName: this.state.userName, songArtist: this.state.songArtist, songTitle: this.state.songTitle, songNotes: this.state.songNotes}})
+addToList = (e) => {
+    e.preventDefault();
+    // this.setState({userName: e.target.value, songTitle: e.target.value, songArtist: e.target.value, songNotes: e.target.value});
+    const { userName, songTitle, songArtist, songNotes } = this.state
+    let listItem = JSON.stringify({ userName, songTitle, songArtist, songNotes });
+
+    fetch("https://tiny-lasagna-server.herokuapp.com/collections/playlisting", {
+      method: "POST",
+      body: listItem,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+  }
+).then(response => response.json())
+.then(data => {
+  this.setState({userName: '', songArtist: '', songTitle: '', songNotes: ''})
+  this.fetchData(e)
+})
+.catch(err => {
+    console.log(err, "boo!");
+  });
+
 }
+// _submit = (e) => {
+//   e.preventDefault()
+//   const song = {userName: this.state.userName, songArtist: this.state.songArtist, songTitle: this.state.songTitle, songNotes: this.state.songNotes}
+//   this.setState({userName: '', songArtist: '', songTitle: '', songNotes: '', songs: [song, ...this.state.songs]})
+// }
 
 fetchData = (e) => {
       e.preventDefault();
       fetch('https://tiny-lasagna-server.herokuapp.com/collections/playlisting').then(results => {
         return results.json();
       }).then(data => {
+        console.log(data)
         this.setState({songs: data});
       })
     }
@@ -51,11 +76,16 @@ componentDidMount() {
 
 render() {
   return (  <div className="app">
-      <Playlistform _name={this._name} _artist={this._artist} _title={this._title} _notes={this._notes} _submit={this._submit}/>
+    <div className="playlist">
+      <Playlistform addToList={this.addToList} _name={this._name} _artist={this._artist} _title={this._title} _notes={this._notes} _submit={this._submit}/>
+    </div>
   <form onSubmit={this.fetchData}>
     <input type="submit" value="Update Playlist" />
   </form>
-   <Playlistitem songs={this.state.songs} /></div>)
+  <div className="results">
+   <Playlistitem songs={this.state.songs} />
+ </div>
+ </div>)
 }
 
 

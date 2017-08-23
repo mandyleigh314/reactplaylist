@@ -9,7 +9,7 @@ class Playlistform extends Component {
 
 render() {
   return (
-    <form>
+    <form onSubmit={this.props.addToList}>
       <div className="form-group-row">
         <label>User Name</label>
         <input onChange={this.props._name} type="text" name="userName" placeholder="User Name" value={this.props.userName} />
@@ -26,7 +26,7 @@ render() {
       <label>Notes About Song</label>
       <input onChange={this.props._notes}type="text" name="songNotes" value={this.props.songNotes} />
       </div>
-      <input onSubmit={this.props._submit} type="submit" value="Submit" />
+      <input type="submit" value="Submit" />
     </form>
   )
 }
